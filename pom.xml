@@ -4,10 +4,120 @@
   <artifactId>build-tools</artifactId>
   <version>0.0.1-SNAPSHOT</version>
   <name>Build Tools</name>
+  <description>A project used to enforce coding conventions on other maven projects.</description>
+  <url>https://github.com/BBD-Development/build-tools</url>
+
+  <licenses>
+    <license>
+      <name>The Apache License, Version 2.0</name>
+      <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+    </license>
+  </licenses>
+
+  <developers>
+    <developer>
+      <name>Stephen Doxsee</name>
+      <email>stephen@doxsee.org</email>
+      <organization>Benefits By Design</organization>
+      <organizationUrl>http://www.bbd.ca</organizationUrl>
+    </developer>
+  </developers>
 
   <scm>
     <connection>scm:git:git://github.com:BBD-Development/build-tools.git</connection>
     <developerConnection>scm:git:git@github.com:BBD-Development/build-tools.git</developerConnection>
     <url>https://github.com/BBD-Development/build-tools</url>
   </scm>
+
+  <distributionManagement>
+    <snapshotRepository>
+      <id>ossrh</id>
+      <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+    </snapshotRepository>
+  </distributionManagement>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.sonatype.plugins</groupId>
+        <artifactId>nexus-staging-maven-plugin</artifactId>
+        <version>1.6.3</version>
+        <extensions>true</extensions>
+        <configuration>
+          <serverId>ossrh</serverId>
+          <nexusUrl>https://oss.sonatype.org/</nexusUrl>
+          <autoReleaseAfterClose>true</autoReleaseAfterClose>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>external.atlassian.jgitflow</groupId>
+        <artifactId>jgitflow-maven-plugin</artifactId>
+        <version>${jgitflow.version}</version>
+        <configuration>
+          <!-- Enable this to push to origin using SSH keys -->
+          <enableSshAgent>true</enableSshAgent>
+          <!-- Keep your maven submodules at the same version as the parent POM -->
+          <autoVersionSubmodules>true</autoVersionSubmodules>
+          <!-- Pushing in-development features to origin allows all devs to see what each other are working on -->
+          <pushFeatures>false</pushFeatures>
+          <!-- This allows the CI server (e.g. Jenkins) to automatically push new releases to origin; you can then either manually deploy them or, if you are doing Continuous Deployments, auto-deploy them to prod -->
+          <pushReleases>true</pushReleases>
+          <!-- Hot Fixes should be pushed to origin as well so that any dev can pick them up -->
+          <pushHotfixes>true</pushHotfixes>
+          <!-- Prevents deployments from dev workstations so that they can be done by a CI server -->
+          <noDeploy>true</noDeploy>
+          <!-- Whether to use the release profile that adds sources and javadocs to the released artifact, if appropriate. If set to true, the plugin sets the property "performRelease" to true, which activates the profile "release-profile", which is inherited from the super pom. -->
+          <useReleaseProfile>false</useReleaseProfile>
+          <flowInitContext>
+            <masterBranchName>master</masterBranchName>
+            <developBranchName>develop</developBranchName>
+            <featureBranchPrefix>feature-</featureBranchPrefix>
+            <releaseBranchPrefix>release-</releaseBranchPrefix>
+            <hotfixBranchPrefix>hotfix-</hotfixBranchPrefix>
+            <!-- <versionTagPrefix>blither-</versionTagPrefix> -->
+          </flowInitContext>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-gpg-plugin</artifactId>
+        <version>1.5</version>
+        <executions>
+          <execution>
+            <id>sign-artifacts</id>
+            <phase>verify</phase>
+            <goals>
+              <goal>sign</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-source-plugin</artifactId>
+        <version>2.2.1</version>
+        <executions>
+          <execution>
+            <id>attach-sources</id>
+            <goals>
+              <goal>jar-no-fork</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-javadoc-plugin</artifactId>
+        <version>2.9.1</version>
+        <executions>
+          <execution>
+            <id>attach-javadocs</id>
+            <goals>
+              <goal>jar</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
 </project>
