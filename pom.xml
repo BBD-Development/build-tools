@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>ca.bbd</groupId>
   <artifactId>build-tools</artifactId>
-  <version>0.1.0-SNAPSHOT</version>
+  <version>0.1.0</version>
   <name>Build Tools</name>
   <description>A project used to enforce coding conventions on other maven projects.</description>
   <url>https://github.com/BBD-Development/build-tools</url>
