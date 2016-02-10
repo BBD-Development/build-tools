@@ -7,6 +7,10 @@
   <description>A project used to enforce coding conventions on other maven projects.</description>
   <url>https://github.com/BBD-Development/build-tools</url>
 
+  <properties>
+    <jgitflow.version>1.0-m5.1</jgitflow.version>
+  </properties>
+
   <licenses>
     <license>
       <name>The Apache License, Version 2.0</name>
